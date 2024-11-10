@@ -1,0 +1,9 @@
+{
+  "name": "MoreCzechItems",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/thunderstore-io",
+  "description": "Items with czech voicelines",
+  "dependencies": [
+      "Evaisa-LethalLib-0.16.1"
+  ]
+}
