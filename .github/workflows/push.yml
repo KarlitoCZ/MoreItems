@@ -1,0 +1,40 @@
+name: Zip and Release on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  zip-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Zip contents of 'out' folder
+        run: |
+          cd out
+          zip -r ../out.zip ./*
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "release-${{ github.run_number }}"
+          release_name: "Automated Release - ${{ github.run_number }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload zip file to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: out.zip
+          asset_name: out.zip
+          asset_content_type: application/zip
