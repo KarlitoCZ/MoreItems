@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1822481787
+CRC: 2923652525
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1c81e149f9f28d5055956a1cb3bd1563
+    Hash: e669d52ee72768d615543002bf77017f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8b09df7e0458775f7dcb8ff280280351
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1c81e149f9f28d5055956a1cb3bd1563
+    Hash: e669d52ee72768d615543002bf77017f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -56,6 +56,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: Battery
 Assets:
+- Assets/items/pizza/Pizza.asset
 - Assets/items/milk/milk.asset
 - Assets/Coke.asset
 - Assets/items/bitcoin/Bitcoin.asset
