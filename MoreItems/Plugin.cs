@@ -5,6 +5,7 @@ using LethalLib;
 using LethalLib.Modules;
 using UnityEngine;
 using System.IO;
+using System;
 
 namespace MoreItems
 {
@@ -20,10 +21,21 @@ namespace MoreItems
 
         void Awake()
         {
-            string assetDir = Path.Combine(Assembly.GetExecutingAssembly().Location, "../itemmod");
+
+            string assetDir = Path.Combine(Assembly.GetExecutingAssembly().Location, "../czechitems");
             AssetBundle bundle = AssetBundle.LoadFromFile(assetDir);
 
+            InitializeNetworkBehaviours();
 
+            string enemyDir = Path.Combine(Assembly.GetExecutingAssembly().Location, "../enemies");
+            AssetBundle enemyBundle = AssetBundle.LoadFromFile(enemyDir);
+
+            var teacher = enemyBundle.LoadAsset<EnemyType>("Assets/Enemies/TeachCharvat/Charvat.asset");
+            var teacherTK = enemyBundle.LoadAsset<TerminalKeyword>("Assets/Enemies/TeachCharvat/CharvatTK.asset");
+            var teacherTN = enemyBundle.LoadAsset<TerminalNode>("Assets/Enemies/TeachCharvat/CharvatTN.asset");
+
+
+            
             Item cocaine = bundle.LoadAsset<Item>("Assets/Coke.asset");
             NetworkPrefabs.RegisterNetworkPrefab(cocaine.spawnPrefab);
             Utilities.FixMixerGroups(cocaine.spawnPrefab);
@@ -42,10 +54,42 @@ namespace MoreItems
             Item pizza = bundle.LoadAsset<Item>("Assets/items/pizza/Pizza.asset");
             NetworkPrefabs.RegisterNetworkPrefab(pizza.spawnPrefab);
             Utilities.FixMixerGroups(pizza.spawnPrefab);
-            Items.RegisterScrap(pizza, 30, Levels.LevelTypes.All);
+            Items.RegisterScrap(pizza, 50, Levels.LevelTypes.All);
+            
 
-            Logger.LogInfo("Patched Items");
+            NetworkPrefabs.RegisterNetworkPrefab(teacher.enemyPrefab);
+
+            Enemies.RegisterEnemy(teacher, 250, Levels.LevelTypes.All, Enemies.SpawnType.Default, teacherTN, teacherTK);
+
+            foreach (Enemies.SpawnableEnemy enemy in Enemies.spawnableEnemies)
+            {
+                Logger.LogInfo(enemy.enemy.enemyName);
+            }
+
+            Logger.LogInfo("Patched Items And Enemies");
         }
 
+
+        private static void InitializeNetworkBehaviours()
+        {
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var type in types)
+            {
+                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                foreach (var method in methods)
+                {
+                    var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
+                    if (attributes.Length > 0)
+                    {
+                        method.Invoke(null, null);
+                    }
+                }
+            }
+        }
+
+
+
     }
+
+
 }
