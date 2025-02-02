@@ -98,7 +98,7 @@ namespace MoreItems
             {
                 case (int)State.SearchingForPlayer:
                     agent.speed = 7f;
-                    if (FoundClosestPlayerInRange(30f, 5f))
+                    if (FoundClosestPlayerInRange(20f, 5f))
                     {
                         LogIfDebugBuild("Start Target Player");
                         StopSearch(currentSearch);
